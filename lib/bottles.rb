@@ -8,11 +8,23 @@ class Bottles
   end
 
   def verse(number)
+    Verse.new(number).verse
+  end
+
+end
+
+class Verse
+  attr_reader :number
+  def initialize(number)
+   @number = number
+  end
+
+  def verse
     case number
       when 0
-       last_verse
+        last_verse
       else
-        regular_verse(number)
+        regular_verse
     end
   end
 
@@ -21,10 +33,10 @@ class Bottles
     <<-Verse
 No more bottles of beer on the wall, no more bottles of beer.
 Go to the store and buy some more, 99 bottles of beer on the wall.
-Verse
+    Verse
   end
-  
-  def regular_verse(number)
+
+  def regular_verse
     <<-Verse
 #{bottle_phrase(number)} of beer on the wall, #{bottle_phrase(number)} of beer.
 #{take_down_phrase((number == 1))} and pass it around, #{bottle_phrase(number - 1)} of beer on the wall.
@@ -33,7 +45,7 @@ Verse
 
   def bottle_phrase(number)
     return "#{number} bottle#{'s' if number > 1}" if number > 0
-     "no more bottles"
+    "no more bottles"
   end
 
   def take_down_phrase(last_beer = true)
