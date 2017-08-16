@@ -3,8 +3,8 @@ class Bottles
     verses(99, 0)
   end
 
-  def verses(*numbers)
-    numbers.first.downto(numbers.last).to_a.map { |number| verse(number) }.join("\n")
+  def verses(from_verse, to_verse)
+    from_verse.downto(to_verse).map { |number| verse(number) }.join("\n")
   end
 
   def verse(number)
@@ -43,9 +43,17 @@ Go to the store and buy some more, 99 bottles of beer on the wall.
     Verse
   end
 
-  def bottle_phrase(number)
-    return "#{number} bottle#{'s' if number > 1}" if number > 0
-    "no more bottles"
+  def bottle_phrase(bottle_number)
+    case bottle_number
+      when 6
+        "1 six pack"
+      when 1
+        "#{bottle_number} bottle"
+      when 0
+        "no more bottles"
+      else
+        "#{bottle_number} bottles"
+    end
   end
 
   def take_down_phrase(last_beer = true)
