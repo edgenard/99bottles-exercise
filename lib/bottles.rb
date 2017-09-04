@@ -8,12 +8,27 @@ class Bottles
   end
 
   def verse(number)
-    bottle_number = BottleNumber.new(number)
+    bottle_number = BottleNumberCreator.create_bottle_number(number)
     next_bottle_number = bottle_number.successor
 
     "#{bottle_number} ".capitalize + "of beer on the wall, " +
     "#{bottle_number} of beer.\n" +
     "#{bottle_number.action}, " + "#{next_bottle_number} of beer on the wall.\n"
+  end
+end
+
+class BottleNumberCreator
+  def self.create_bottle_number(number)
+    case number
+    when 6
+      BottleNumberSix.new
+    when 1
+      BottleNumberOne.new
+    when 0
+      BottleNumberZero.new
+    else
+      BottleNumber.new(number)
+    end
   end
 end
 
@@ -28,52 +43,64 @@ class BottleNumber
   end
 
   def container
-    case number
-    when 6
-      'six-pack'
-    when 1
-      'bottle'
-    else
-      'bottles'
-    end
+    'bottles'
   end
 
   def quantity
-    case number
-    when 6
-      '1'
-    when 0
-      'no more'
-    else
-      number.to_s
-    end
+    number.to_s
   end
 
   def successor
-    if number == 0
-      BottleNumber.new(99)
-    else
-      BottleNumber.new(number - 1)
-    end
+    BottleNumberCreator.create_bottle_number(number - 1)
   end
 
   def action
-    case number
-    when 0
-      'Go to the store and buy some more'
-    else
-      "Take #{pronoun} down and pass it around"
-    end
+    "Take one down and pass it around"
+  end
+end
+
+class BottleNumberZero < BottleNumber
+  def initialize()
+    super(0)
   end
 
-  def pronoun
-    case number
-    when 1
-      'it'
-    else
-      'one'
-    end
+  def successor
+    BottleNumberCreator.create_bottle_number(99)
   end
 
+  def action
+    'Go to the store and buy some more'
+  end
 
+  def quantity
+    'no more'
+  end
+end
+
+class BottleNumberOne < BottleNumber
+  def initialize
+    super(1)
+  end
+
+  def action
+    "Take it down and pass it around"
+  end
+
+  def container
+    "bottle"
+  end
+end
+
+class BottleNumberSix < BottleNumber
+  def initialize()
+    super(6)
+  end
+
+  def container
+    'six-pack'
+  end
+
+  def quantity
+    '1'
+  end
 end
